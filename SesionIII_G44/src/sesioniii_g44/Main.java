@@ -6,7 +6,7 @@
 package sesioniii_g44;
 
 import java.util.Date;
-
+import java.util.Scanner;
 /**
  *
  * @author apmejiar
@@ -20,14 +20,16 @@ public class Main {
 
         //Trabajar con fechas en java
         Date fecha_actual = new Date();
+        //Trabajar con clase Scanner para permitir el ingreso de texto por parte del user
+        Scanner inst_entrada = new Scanner(System.in);
         // Instancia la clase mascota
         MascotaGetSetClass inst_mascota = new MascotaGetSetClass();
         System.out.println("FORMA I: Consulta información desde el contructor");
         MascotaConstructorClass inst_mascotac = new MascotaConstructorClass("Dante",fecha_actual, false, "Labrador",999);
         MascotaFuncionConsultaClass inst_mascotaf = new MascotaFuncionConsultaClass("Rocky2", fecha_actual,false,"bull terrier",1053);
+      
         
-//Mediante la instancia llamo los métodos o funciones de la clase
-        
+        //Mediante la instancia llamo los métodos o funciones de la clase
         System.out.println("\nFORMA II: Consulta información a partir del GET y SET");
         inst_mascota.setNombre_mascota("Rocky");
         System.out.println("    >>Nombre: " + inst_mascota.getNombre_mascota());
@@ -47,6 +49,24 @@ public class Main {
         //Imprimir salida de la forma III:
         System.out.println("\nFORMA III: Consulta información a función que contiene todos los GETTER de la clase");
         System.out.println(inst_mascotaf.consultar_informacion_mascota());
+        
+        System.out.println("\nINFORMACIÓN DEL DUEÑO DE LA MASCOTA");
+        //Solicitar información al usuario acerca del dueño de la mascota:
+        System.out.println(">>Nombre:");
+        String nombre_user = inst_entrada.nextLine();
+        
+        System.out.println(">>Tipo documento:");
+        String tipo_doc_user = inst_entrada.nextLine();
+        
+        System.out.println(">>N° documento:");
+        int num_doc_user = inst_entrada.nextInt();
+        
+        System.out.println(">>N° telefono:");
+        int contacto_user = inst_entrada.nextInt();
+        //Las variables que almacenan el valor que ingresa el usuario, pasan a ser los
+        //parametros de la clase
+        DueñoMascotaClass inst_dueño = new DueñoMascotaClass(nombre_user,tipo_doc_user,num_doc_user, contacto_user, inst_mascotaf.getNombre_mascota());
+        System.out.println(inst_dueño.consultar_informacion_dueño_mascota());
     }
 
 }
