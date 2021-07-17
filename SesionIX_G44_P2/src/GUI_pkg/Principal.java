@@ -16,7 +16,9 @@ import javax.swing.JOptionPane;
  * @author apmejiar
  */
 public class Principal extends javax.swing.JFrame {
-LinkedList <DogPetClass> dogObjectList = new LinkedList<>();
+
+    LinkedList<DogPetClass> dogObjectList = new LinkedList<>();
+
     /**
      * Creates new form Principal
      */
@@ -113,10 +115,25 @@ LinkedList <DogPetClass> dogObjectList = new LinkedList<>();
 
         btn_show.setText("Consultar");
         btn_show.setToolTipText("");
+        btn_show.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_showActionPerformed(evt);
+            }
+        });
 
         btn_edit.setText("Editar");
+        btn_edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_editActionPerformed(evt);
+            }
+        });
 
         btn_delete.setText("Eliminar");
+        btn_delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_deleteActionPerformed(evt);
+            }
+        });
 
         cb_food_type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dog Chow", "Farmina Vet Life", "Hills", "Ringo", "Royal Canin", "Taste of the Wild" }));
 
@@ -346,55 +363,167 @@ LinkedList <DogPetClass> dogObjectList = new LinkedList<>();
 
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
         // TODO add your handling code here:
-        try{
+        try {
             //Capturar texto ingresado por el user desde un TextField
             int code = Integer.parseInt(txt_code.getText());
             String name = txt_name.getText();
             int born_year = Integer.parseInt(txt_born_year.getText());
-            
+
             //Capturar selección de Item desde el comboBox
             String health_status = cb_health_status.getSelectedItem().toString();
             String breed = cb_breed.getSelectedItem().toString();
             String food_type = cb_food_type.getSelectedItem().toString();
-            
+
             //Capturar selección de Item en radiobutton
             char sexo;
-            if(rb_h.isSelected()){
+            if (rb_h.isSelected()) {
                 sexo = 'H';
-            }else{
+            } else {
                 sexo = 'M';
             }
             //Capturar valor si el checkbox esta o no seleccionado
             boolean pedigree = cb_pedigree.isSelected();
             //Prueba 1:
-            System.out.println(code + " " + name + " "+ born_year + " "+ breed + " "+ health_status + " "+ food_type + " "+ sexo + " "+ pedigree);
+            System.out.println(code + " " + name + " " + born_year + " " + breed + " " + health_status + " " + food_type + " " + sexo + " " + pedigree);
             //Validar que la información de ciertos campos es requerida
-            if(name.equals("")){
+            if (name.equals("")) {
                 JOptionPane.showMessageDialog(this, "No ingresaste el nombre de la mascota");
-            }else{
+            } else {
                 DogPetClass pet_dog = new DogPetClass(code, name, born_year, health_status, sexo, breed, pedigree, food_type);
                 dogObjectList.add(pet_dog);
-                listar_mascotas();
+                this.listar_mascotas();
                 JOptionPane.showMessageDialog(this, "Se ha creado exitosamente la mascota");
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Ingrese un año de nacimiento correcto");
         }
-        
+
     }//GEN-LAST:event_btn_addActionPerformed
 
-    
-    public void listar_mascotas(){
+    private void btn_showActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_showActionPerformed
+        // TODO add your handling code here:
+        //clearDogForm();
+        int code = Integer.parseInt(txt_code.getText());
+        boolean se_encontro = false;
+        System.out.println(code);
+        for (DogPetClass dog : dogObjectList) {
+            if (dog.getCode() == code) {
+                txt_name.setText(dog.getName());
+                txt_born_year.setText(dog.getBorn_year() + "");
+                cb_health_status.setSelectedItem(dog.getHealth_status());
+                cb_food_type.setSelectedItem(dog.getTipo_alimento());
+                cb_breed.setSelectedItem(dog.getBreed());
+                if(rb_h.isSelected()){
+                    rb_h.setSelected(true);
+                }else{
+                    rb_h.setSelected(false);
+                }
+                if(rb_m.isSelected()){
+                    rb_m.setSelected(true);
+                }else{
+                    rb_m.setSelected(false);
+                }
+                cb_pedigree.setSelected(dog.isPedigree());
+                se_encontro = true;
+                break;
+            }
+        }
+        if (!se_encontro) {
+            JOptionPane.showMessageDialog(this, "No se encontro la mascota consultada");
+        }
+    }//GEN-LAST:event_btn_showActionPerformed
+
+    private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
+        // TODO add your handling code here:
+        
+        int code = Integer.parseInt(txt_code.getText());
+        boolean se_encontro = false;
+        System.out.println(code);
+        for (DogPetClass dog : dogObjectList) {
+            if (dog.getCode() == code) {
+                String name = txt_name.getText();
+                int born_year = Integer.parseInt(txt_born_year.getText());
+                //Capturar selección de Item desde el comboBox
+                String health_status = cb_health_status.getSelectedItem().toString();
+                String breed = cb_breed.getSelectedItem().toString();
+                String food_type = cb_food_type.getSelectedItem().toString();
+
+                //Capturar selección de Item en radiobutton
+                char sexo;
+                if (rb_h.isSelected()) {
+                    sexo = 'H';
+                } else {
+                    sexo = 'M';
+                }
+                //Capturar valor si el checkbox esta o no seleccionado
+                boolean pedigree = cb_pedigree.isSelected();
+                dog.setName(name);
+                dog.setBorn_year(born_year);
+                dog.setBreed(breed);
+                dog.setHealth_status(health_status);
+                dog.setPedigree(pedigree);
+                dog.setTipo_alimento(food_type);
+                dog.setSexo(sexo);
+                this.clearDogForm();
+                JOptionPane.showMessageDialog(this, "Se ha editado exitosamente la información de la mascota");
+                this.listar_mascotas();
+                se_encontro = true;
+                break;
+            }
+        }
+        if (!se_encontro) {
+            JOptionPane.showMessageDialog(this, "No se encontro la mascota consultada");
+        }
+    }//GEN-LAST:event_btn_editActionPerformed
+
+    private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
+        // TODO add your handling code here:
+        int code = Integer.parseInt(txt_code.getText());
+        boolean se_encontro = false;
+        System.out.println(code);
+        for (DogPetClass dog : dogObjectList) {
+            if (dog.getCode() == code) {
+                this.dogObjectList.remove(dog);
+                this.clearDogForm();
+                this.listar_mascotas();
+                JOptionPane.showMessageDialog(this, "Se ha eliminado exitosamente la información de la mascota");
+                
+                se_encontro = true;
+                break;
+            }
+        }
+        if (!se_encontro) {
+            JOptionPane.showMessageDialog(this, "No se encontro la mascota consultada");
+        }
+    }//GEN-LAST:event_btn_deleteActionPerformed
+
+    //Limpiar las celdas y la selección
+    private void clearDogForm() {
+        //Para limpiar el texto de los TextField
+        txt_code.setText("");
+        txt_name.setText("");
+        txt_born_year.setText("");
+        //Para limpiar la selección de los combobox:
+        cb_breed.setSelectedItem(0);
+        cb_food_type.setSelectedItem(0);
+        cb_health_status.setSelectedItem(0);
+        //Para limpiar la selección del checkbox y radiobuttons
+        rb_h.setSelected(false);
+        rb_m.setSelected(false);
+        cb_pedigree.setSelected(false);
+    }
+
+    public void listar_mascotas() {
         DefaultListModel lista = new DefaultListModel();
         int indice_lista = 0;
-        for (DogPetClass dog: dogObjectList) {
-            String registro_mascota = dog.getCode() + " - " + dog.getName() + " - " + dog.getBreed() + " - " + dog.getBorn_year()+  " - "+dog.getHealth_status() + " - " +  dog.getTipo_alimento() + " - " + dog.getSexo();
-            lista.add(indice_lista,registro_mascota);
+        for (DogPetClass dog : dogObjectList) {
+            String registro_mascota = dog.getCode() + " - " + dog.getName() + " - " + dog.getBreed() + " - " + dog.getBorn_year() + " - " + dog.getHealth_status() + " - " + dog.getTipo_alimento() + " - " + dog.getSexo();
+            lista.add(indice_lista, registro_mascota);
             indice_lista++;
         }
         pet_list.setModel(lista);
     }
-    
+
     /**
      * @param args the command line arguments
      */
