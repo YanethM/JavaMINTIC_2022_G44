@@ -1,1 +1,0 @@
-# JavaMINTIC_2022_G44
